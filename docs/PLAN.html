@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Company · 规划方案</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+:root {
+  --bg: #f7f5f0;
+  --card: #ffffff;
+  --line: #e9e3d6;
+  --line-soft: #f0ead9;
+  --text: #14171e;
+  --muted: #7c7a72;
+  --subtle: #a8a59a;
+  --primary: #2f6f5e;       /* 深绿 - 主色 */
+  --primary-soft: #d4e4dd;
+  --accent: #c97b3f;        /* 陶土橙 - 强调 */
+  --accent-soft: #f0dcc7;
+  --danger: #b06367;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  background-image:
+    radial-gradient(at 0% 0%, rgba(47,111,94,0.05) 0%, transparent 40%),
+    radial-gradient(at 100% 100%, rgba(201,123,63,0.04) 0%, transparent 40%);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: 'DM Serif Display', 'Songti SC', 'STSong', serif; font-weight: 400; letter-spacing: -0.005em; margin: 0; }
+h1 { font-size: 38px; line-height: 1.15; }
+h2 { font-size: 26px; line-height: 1.25; }
+h3 { font-size: 20px; line-height: 1.3; }
+h4 { font-size: 16px; font-family: 'Outfit', sans-serif; font-weight: 600; }
+
+p { margin: 0 0 10px 0; }
+code, pre { font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace; }
+code { background: var(--line-soft); padding: 1px 6px; border-radius: 4px; font-size: 13px; color: var(--primary); }
+pre { background: #1a1d24; color: #e8e6e0; padding: 18px 20px; border-radius: 12px; overflow-x: auto; font-size: 13px; line-height: 1.55; }
+pre code { background: transparent; color: inherit; padding: 0; }
+
+.container { max-width: 1080px; margin: 0 auto; padding: 56px 28px 80px; }
+
+/* HERO */
+.hero { margin-bottom: 64px; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: var(--primary); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 18px; }
+.hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--primary); }
+.hero h1 { font-size: 48px; margin-bottom: 20px; max-width: 780px; }
+.hero .sub { font-size: 18px; color: var(--muted); max-width: 720px; margin-bottom: 32px; }
+.hero-meta { display: flex; gap: 24px; flex-wrap: wrap; padding: 18px 22px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; max-width: 720px; }
+.hero-meta-item .k { font-size: 11px; text-transform: uppercase; color: var(--subtle); letter-spacing: 0.08em; margin-bottom: 4px; }
+.hero-meta-item .v { font-size: 14px; color: var(--text); font-weight: 500; }
+
+/* SECTION */
+section { margin-bottom: 64px; }
+.sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.sec-num { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent); font-weight: 500; }
+.sec-head h2 { font-size: 28px; }
+.sec-sub { color: var(--muted); margin: -16px 0 24px 0; font-size: 14px; }
+
+/* CARDS */
+.grid { display: grid; gap: 18px; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px) { .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; transition: all 0.2s; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px -8px rgba(0,0,0,0.08); }
+.card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.card-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.card-icon.primary { background: var(--primary-soft); color: var(--primary); }
+.card-icon.accent { background: var(--accent-soft); color: var(--accent); }
+.card-icon.muted { background: #ece8de; color: var(--muted); }
+.card-title { font-weight: 600; font-size: 15px; }
+.card-body { font-size: 14px; color: var(--muted); line-height: 1.55; }
+.card ul { margin: 8px 0 0 0; padding-left: 16px; }
+.card li { margin-bottom: 4px; font-size: 13.5px; color: var(--muted); }
+
+/* ARCHITECTURE */
+.arch-layers { display: flex; flex-direction: column; gap: 14px; }
+.arch-layer { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: center; }
+@media (max-width: 700px) { .arch-layer { grid-template-columns: 1fr; gap: 12px; } }
+.arch-layer-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); margin-bottom: 4px; }
+.arch-layer h3 { margin-bottom: 4px; }
+.arch-layer-desc { font-size: 13px; color: var(--muted); }
+.arch-layer-content { display: flex; flex-wrap: wrap; gap: 8px; }
+.arch-tag { background: var(--bg); border: 1px solid var(--line); padding: 5px 12px; border-radius: 999px; font-size: 12.5px; color: var(--text); font-family: 'JetBrains Mono', monospace; }
+
+/* TIMELINE */
+.timeline { list-style: none; padding: 0; margin: 0; position: relative; }
+.timeline::before { content: ""; position: absolute; left: 11px; top: 6px; bottom: 6px; width: 2px; background: linear-gradient(180deg, var(--primary), var(--accent)); opacity: 0.4; }
+.timeline li { position: relative; padding: 0 0 28px 44px; }
+.timeline li:last-child { padding-bottom: 0; }
+.timeline li::before { content: ""; position: absolute; left: 5px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--card); border: 3px solid var(--primary); }
+.timeline h4 { font-size: 16px; margin-bottom: 4px; }
+.timeline .when { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); margin-bottom: 6px; }
+.timeline p { font-size: 14px; color: var(--muted); margin-bottom: 0; }
+
+/* TREE / STRUCTURE */
+.tree { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 26px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7; }
+.tree .folder { color: var(--primary); font-weight: 500; }
+.tree .file { color: var(--text); }
+.tree .comment { color: var(--subtle); font-style: italic; }
+.tree .hl { background: var(--accent-soft); padding: 1px 4px; border-radius: 3px; color: var(--accent); }
+
+/* TABLE */
+table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+th, td { padding: 12px 16px; text-align: left; font-size: 14px; }
+th { background: #fafaf6; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--line); }
+td { border-bottom: 1px solid var(--line-soft); color: var(--muted); }
+tr:last-child td { border-bottom: none; }
+
+/* CALLOUT */
+.callout { background: linear-gradient(135deg, var(--primary-soft) 0%, #e8f0eb 100%); border-left: 3px solid var(--primary); padding: 16px 20px; border-radius: 0 12px 12px 0; margin: 18px 0; }
+.callout.warn { background: linear-gradient(135deg, var(--accent-soft) 0%, #faeede 100%); border-left-color: var(--accent); }
+.callout strong { color: var(--primary); display: block; margin-bottom: 4px; font-size: 13px; }
+.callout.warn strong { color: var(--accent); }
+.callout p { font-size: 13.5px; color: var(--text); margin: 0; }
+
+/* DIAGRAM CONTAINER */
+.diagram { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 28px; margin: 18px 0; overflow-x: auto; }
+
+/* PHASE CARDS */
+.phase { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; position: relative; overflow: hidden; }
+.phase::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary); }
+.phase.p2::before { background: var(--accent); }
+.phase.p3::before { background: var(--danger); }
+.phase-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.phase-tag { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--primary); font-weight: 600; }
+.phase.p2 .phase-tag { color: var(--accent); }
+.phase.p3 .phase-tag { color: var(--danger); }
+.phase h3 { font-size: 18px; }
+.phase .days { font-size: 12px; color: var(--subtle); margin-left: auto; }
+.phase-body { font-size: 13.5px; color: var(--muted); }
+.phase ul { margin: 8px 0 0; padding-left: 18px; }
+.phase li { margin-bottom: 3px; font-size: 13.5px; }
+
+/* FOOTER */
+footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--line); color: var(--subtle); font-size: 13px; text-align: center; }
+
+/* UTILS */
+.row { display: flex; align-items: center; gap: 10px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-18 { margin-bottom: 18px; }
+.mb-24 { margin-bottom: 24px; }
+.tag-pill { display: inline-block; background: var(--bg); border: 1px solid var(--line); padding: 2px 9px; border-radius: 999px; font-size: 12px; color: var(--muted); margin-right: 4px; }
+.tag-pill.green { background: var(--primary-soft); border-color: transparent; color: var(--primary); }
+.tag-pill.orange { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+
+.mermaid { background: transparent !important; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">项目规划 · v0.1</div>
+    <h1>Agent Company — 一个可生长的 AI 公司</h1>
+    <p class="sub">
+      你(老板)发出一个想法,系统自动组建团队、分配任务、协作执行、测试验收,最终交付成品。部门、岗位、agent 都可以由你随时增减,公司随项目一起长出来。
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="k">路径</div><div class="v">自研 runtime + 多 LLM provider</div></div>
+      <div class="hero-meta-item"><div class="k">交互</div><div class="v">Web Dashboard + 对话式配置</div></div>
+      <div class="hero-meta-item"><div class="k">范围</div><div class="v">完整公司(6 部门 8+ 岗位)</div></div>
+      <div class="hero-meta-item"><div class="k">阶段</div><div class="v">MVP 1 周 · 完整版 3 周</div></div>
+    </div>
+  </div>
+
+  <!-- 0 一句话定位 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">00</span><h2>一句话定位</h2></div>
+    <p class="sec-sub">把"一个公司如何运转"翻译成可执行的多 agent 编排系统。</p>
+    <div class="callout">
+      <strong>核心隐喻</strong>
+      <p>workspace 是一家公司,文件夹里的人是各部门 agent。老板说一句话 = 启动一个项目,部门主管接单、拆解、派活,一线 agent 干活产出,QA 把关,运营交付。所有产物落地成真实文件,人(你)随时可以下场检查、调整、加人。</p>
+    </div>
+  </section>
+
+  <!-- 1 整体架构 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>整体架构 · 三层模型</h2></div>
+    <p class="sec-sub">组织层(谁是谁)→ 任务流层(怎么协作)→ 运行时层(怎么跑起来)。</p>
+    <div class="arch-layers">
+      <div class="arch-layer">
+        <div>
+          <div class="arch-layer-num">LAYER 01</div>
+          <h3>组织层</h3>
+          <div class="arch-layer-desc">谁是谁 — 部门、岗位、agent 的静态定义</div>
+        </div>
+        <div class="arch-layer-content">
+          <span class="arch-tag">Company</span>
+          <span class="arch-tag">Department</span>
+          <span class="arch-tag">Agent (Boss/Head/Leader/Worker)</span>
+          <span class="arch-tag">Skill</span>
+          <span class="arch-tag">Tool</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div>
+          <div class="arch-layer-num">LAYER 02</div>
+          <h3>任务流层</h3>
+          <div class="arch-layer-desc">怎么协作 — 项目从立项到交付的状态机</div>
+        </div>
+        <div class="arch-layer-content">
+          <span class="arch-tag">Project</span>
+          <span class="arch-tag">Phase</span>
+          <span class="arch-tag">Task</span>
+          <span class="arch-tag">Deliverable</span>
+          <span class="arch-tag">Review</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div>
+          <div class="arch-layer-num">LAYER 03</div>
+          <h3>运行时层</h3>
+          <div class="arch-layer-desc">怎么跑 — agent 实际跑起来需要什么</div>
+        </div>
+        <div class="arch-layer-content">
+          <span class="arch-tag">LLM Provider</span>
+          <span class="arch-tag">Agent Runtime</span>
+          <span class="arch-tag">Task Queue</span>
+          <span class="arch-tag">Storage</span>
+          <span class="arch-tag">WebSocket</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 公司组织模板 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>公司组织模板 · 6 大部门</h2></div>
+    <p class="sec-sub">默认公司形态。可以删可以加,这是出厂设置。</p>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div class="card-title">📋 产品部 (Product)</div>
+        </div>
+        <ul>
+          <li>产品经理(Head)</li>
+          <li>需求分析师</li>
+          <li>交付物: PRD.md、用户故事、优先级</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          </div>
+          <div class="card-title">🎨 设计部 (Design)</div>
+        </div>
+        <ul>
+          <li>设计主管(Head)</li>
+          <li>UI 设计师、视觉设计师</li>
+          <li>插画师 / 视频导演 / 音乐制作</li>
+          <li>交付物: 设计稿、组件库、视频、音频</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <div class="card-title">💻 研发部 (Dev)</div>
+        </div>
+        <ul>
+          <li>研发主管(Head)</li>
+          <li>前端组长(Leader) + 前端工程师</li>
+          <li>后端组长(Leader) + 后端工程师</li>
+          <li>全栈支援</li>
+          <li>交付物: 源代码、PR、构建产物</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon accent">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v6h6V2"/><path d="M5 8h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/></svg>
+          </div>
+          <div class="card-title">🧪 质量部 (QA)</div>
+        </div>
+        <ul>
+          <li>QA 主管(Head)</li>
+          <li>功能测试、性能测试、自动化测试</li>
+          <li>交付物: 测试报告、缺陷清单、回归记录</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon accent">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="card-title">🚀 运营部 (Ops)</div>
+        </div>
+        <ul>
+          <li>运营主管(Head)</li>
+          <li>部署工程师、技术写手、客服</li>
+          <li>交付物: 部署包、用户文档、发布说明</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon muted">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="card-title">🧠 行政/HR (Meta)</div>
+        </div>
+        <ul>
+          <li>调度员(Orchestrator)</li>
+          <li>记忆管理员(Knowledge Curator)</li>
+          <li>负责: 任务路由、跨部门协调、知识沉淀</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 项目流水线 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>项目流水线 · 状态机</h2></div>
+    <p class="sec-sub">老板说一句话 → 经过 6 个阶段 → 交付。每阶段产物是下一阶段输入。</p>
+
+    <div class="diagram">
+      <div class="mermaid">
+flowchart LR
+  A([💡 IDEA<br/>老板发起]) --> B[📝 PRD<br/>产品部]
+  B --> C[🎨 DESIGN<br/>设计部]
+  B --> D2[💻 BACKEND<br/>后端组]
+  C --> E[💻 FRONTEND<br/>前端组]
+  D2 --> F[🔗 INTEGRATE<br/>联调]
+  E --> F
+  F --> G[🧪 QA<br/>质量部]
+  G -->|不通过| F
+  G -->|通过| H[📦 DELIVERY<br/>运营部]
+  H --> I([✅ DONE])
+  style A fill:#f0ead9,stroke:#c97b3f
+  style I fill:#d4e4dd,stroke:#2f6f5e
+  style G fill:#f0dcc7,stroke:#c97b3f
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>关键规则</strong>
+      <p>QA 阶段是"质量闸口":测试不通过自动打回研发部对应组(标失败原因),研发修复后重新进 QA。研发和设计可以并行(都依赖 PRD)。老板可以随时介入任意阶段。</p>
+    </div>
+  </section>
+
+  <!-- 4 核心数据模型 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>核心数据模型</h2></div>
+    <p class="sec-sub">4 个核心结构撑起整个系统。YAML 配置 + SQLite 存储。</p>
+
+    <div class="grid grid-2">
+      <div>
+        <h4 class="mb-12">① 公司组织 (company.yaml)</h4>
+<pre><code>company:
+  name: "球球的 AI 公司"
+  boss: "球球"
+
+departments:
+  - id: dev
+    name: "研发部"
+    head: dev-head          # agent id
+    teams: [frontend, backend]
+  - id: qa
+    name: "质量部"
+    head: qa-head
+
+agents:
+  - id: dev-head
+    department: dev
+    role: head              # head | leader | worker
+    llm: claude-sonnet      # 引用 LLM provider
+    system_prompt: |
+      你是研发主管,负责拆解需求、分配任务...
+    tools: [bash, edit, glob, grep]
+  - id: frontend-worker-1
+    department: dev
+    team: frontend
+    role: worker
+    llm: gpt-4o
+    tools: [bash, edit, web_fetch]
+
+llm_providers:
+  - id: claude-sonnet
+    type: anthropic
+    api_key: sk-ant-...
+    model: claude-sonnet-4-5
+  - id: gpt-4o
+    type: openai
+    endpoint: https://api.openai.com/v1   # 可指向第三方
+    api_key: sk-...
+    model: gpt-4o</code></pre>
+      </div>
+
+      <div>
+        <h4 class="mb-12">② LLM Provider(关键)</h4>
+<pre><code>// 多 provider 抽象,支持任意
+// 兼容 Anthropic / OpenAI 协议的 endpoint
+
+interface LLMProvider {
+  id: string
+  type: 'anthropic' | 'openai'
+  endpoint?: string    // 留空 = 官方
+  apiKey: string
+  model: string
+  maxTokens?: number
+  temperature?: number
+}
+
+class LLMRegistry {
+  add(p: LLMProvider)
+  chat(id, msgs): AsyncIterable<Token>
+  list(): LLMProvider[]
+}</code></pre>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 10px;">第三方接入示例:填入 <code>https://api.deepseek.com/v1</code> + DeepSeek key,选 <code>type: openai</code>,就能用 DeepSeek 当 agent 大脑。</p>
+      </div>
+
+      <div>
+        <h4 class="mb-12">③ 项目 (Project)</h4>
+<pre><code>interface Project {
+  id: string             // proj-20260813-001
+  title: string
+  boss: string           // 球球
+  status: 'idea' | 'prd'
+        | 'design' | 'dev' | 'qa'
+        | 'delivery' | 'done'
+  createdAt: number
+  phases: Phase[]        // 6 个阶段
+  deliverables: {
+    prd?: string         // 文件路径
+    design?: string[]
+    src?: string
+    testReport?: string
+  }
+}
+
+interface Phase {
+  id: string             // 'prd' | 'design' | ...
+  status: 'pending' | 'running'
+        | 'done' | 'failed' | 'blocked'
+  tasks: Task[]
+  startedAt?: number
+  finishedAt?: number
+}</code></pre>
+      </div>
+
+      <div>
+        <h4 class="mb-12">④ 任务 (Task)</h4>
+<pre><code>interface Task {
+  id: string             // task-001
+  projectId: string
+  phase: string          // 所属阶段
+  department: string
+  assignee: string       // agent id
+  status: 'pending' | 'running'
+        | 'done' | 'failed' | 'blocked'
+  input: {
+    prompt: string       // 任务指令
+    files?: string[]     // 输入文件
+  }
+  output?: {
+    files?: string[]     // 产出文件
+    summary: string      // 摘要
+  }
+  dependsOn: string[]    // 前置任务
+  attempts: number       // 重试次数
+  cost?: {               // 资源消耗
+    tokens: number
+    duration: number
+  }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 运行时核心 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>运行时核心 · 4 个关键模块</h2></div>
+    <p class="sec-sub">从"定义"到"跑起来"需要这四块。</p>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="card-title">LLM 抽象层 (server/runtime/llm)</div>
+        </div>
+        <div class="card-body">
+          统一 Anthropic / OpenAI 协议,实现流式 chat + tool use。配置存 SQLite,运行时按 agent 的 <code>llm</code> 字段路由。
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <div class="card-title">Agent Runtime</div>
+        </div>
+        <div class="card-body">
+          每个 agent 跑在独立 Node.js 子进程 / Worker 中,加载 system_prompt + tools + 历史,执行任务,输出结构化结果。
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon accent">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <div class="card-title">Orchestrator 调度器</div>
+        </div>
+        <div class="card-body">
+          监听项目状态机,推进 phase 流转,处理 agent 完成/失败事件,触发下一阶段。可视作"PMO 办公室"。
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon accent">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="card-title">WebSocket 事件总线</div>
+        </div>
+        <div class="card-body">
+          实时推送 agent 输出、日志、状态变化给前端 Dashboard。老板可"围观"全过程。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 项目结构 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>项目目录结构</h2></div>
+    <p class="sec-sub">一个 workspace = 一家公司。每个项目独立子目录,所有产物落地成真实文件。</p>
+
+    <div class="tree">
+<span class="folder">agent-company/</span>                          <span class="comment">← 这就是"公司"</span>
+├── <span class="folder">company.yaml</span>                  <span class="hl">公司组织配置</span>(部门/agent/LLM)
+├── <span class="folder">company.db</span>                    <span class="comment">SQLite: 项目/任务/产物元数据</span>
+├── <span class="folder">.env</span>                          <span class="comment">LLM API keys(不进 git)</span>
+│
+├── <span class="folder">server/</span>                      <span class="comment">Node.js + TypeScript 后端</span>
+│   ├── src/
+│   │   ├── <span class="folder">runtime/llm/</span>            <span class="hl">多 LLM provider 抽象</span>
+│   │   ├── <span class="folder">runtime/agent.ts</span>         <span class="comment">单 agent 执行循环</span>
+│   │   ├── <span class="folder">runtime/orchestrator.ts</span>  <span class="comment">项目状态机调度</span>
+│   │   ├── <span class="folder">api/</span>                    <span class="comment">REST + WebSocket</span>
+│   │   ├── <span class="folder">store/</span>                 <span class="comment">SQLite 持久化</span>
+│   │   └── <span class="folder">config/parser.ts</span>       <span class="comment">YAML 解析 + 校验</span>
+│   └── package.json
+│
+├── <span class="folder">web/</span>                         <span class="comment">React + Vite 前端 Dashboard</span>
+│   └── src/
+│       ├── <span class="folder">pages/</span>
+│       │   ├── Dashboard.tsx       <span class="comment">公司总览</span>
+│       │   ├── Projects.tsx        <span class="comment">项目 Kanban</span>
+│       │   ├── Departments.tsx     <span class="comment">部门 + agent 列表</span>
+│       │   ├── AgentEdit.tsx       <span class="comment">agent 编辑</span>
+│       │   └── LiveLog.tsx         <span class="comment">实时日志</span>
+│       └── components/
+│
+├── <span class="folder">projects/</span>                    <span class="comment">所有项目的工作区</span>
+│   └── <span class="folder">proj-20260813-001/</span>       <span class="comment">单个项目</span>
+│       ├── prd.md
+│       ├── design/
+│       ├── src/
+│       ├── test-report.md
+│       └── README.md
+│
+└── <span class="folder">docs/</span>
+    ├── PLAN.html   <span class="comment">← 你正在看的这个</span>
+    └── API.md
+    </div>
+  </section>
+
+  <!-- 7 Web Dashboard -->
+  <section>
+    <div class="sec-head"><span class="sec-num">07</span><h2>Web Dashboard · 4 个核心页面</h2></div>
+    <p class="sec-sub">视觉化让老板随时掌握公司全貌。</p>
+
+    <div class="grid grid-4">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          </div>
+          <div class="card-title">公司总览</div>
+        </div>
+        <div class="card-body">部门卡片网格 + 当前项目进度条 + 今日活跃 agent。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v9H3z"/><path d="M14 3h7v5h-7z"/><path d="M14 12h7v9h-7z"/><path d="M3 16h7v5H3z"/></svg>
+          </div>
+          <div class="card-title">项目看板</div>
+        </div>
+        <div class="card-body">Kanban 视图:待办 / 进行中 / 已交付,每张卡显示 phase + 负责人 agent。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon accent">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="card-title">部门管理</div>
+        </div>
+        <div class="card-body">看每个部门成员、任务队列、在岗状态。增删 agent 在这里。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon accent">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="card-title">实时日志</div>
+        </div>
+        <div class="card-body">WebSocket 推流,看 agent 思考/工具调用/产出的全过程。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 对话式配置 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">08</span><h2>对话式配置 · 怎么"加人加部门"</h2></div>
+    <p class="sec-sub">老板不用写 YAML,直接跟我说就行。我来更新 <code>company.yaml</code>。</p>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h4 class="mb-12">💬 自然语言添加</h4>
+        <pre><code>球球: "加个市场部,
+        有个营销 agent 专门写文案"
+
+Mavis:  ✅ 已创建
+        部门: 市场部 (marketing)
+        角色: 营销专员
+        LLM: claude-sonnet
+        工具: [web_search, write, edit]
+
+        写入了 company.yaml,
+        重启后生效。要现在重启吗?</code></pre>
+      </div>
+
+      <div class="card">
+        <h4 class="mb-12">🔧 解析逻辑</h4>
+        <ul>
+          <li>意图识别: 加部门 / 加 agent / 改 LLM / 改 prompt</li>
+          <li>实体抽取: 部门名、岗位名、工具、LLM 类型</li>
+          <li>补全默认值: 系统 prompt 模板、基础工具集</li>
+          <li>写入前预览 + 确认</li>
+          <li>写入 company.yaml,触发校验</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 实施路径 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">09</span><h2>实施路径 · 3 阶段交付</h2></div>
+    <p class="sec-sub">完整公司形态 = 3 周。每个阶段都跑得通,前一阶段是后一阶段的地基。</p>
+
+    <div class="grid">
+      <div class="phase">
+        <div class="phase-head">
+          <span class="phase-tag">PHASE 1</span>
+          <h3>地基 · 跑通单部门闭环</h3>
+          <span class="days">5 天</span>
+        </div>
+        <div class="phase-body">
+          能让一个 agent 跑起来 + 接收任务 + 输出产物 + 老板能看到。
+        </div>
+        <ul>
+          <li>LLM 抽象层(Anthropic + OpenAI 协议,可加第三方 endpoint)</li>
+          <li>Agent Runtime 最小实现(system_prompt + tools + chat loop)</li>
+          <li>SQLite 存项目/任务/产物</li>
+          <li>Web Dashboard v1(只读,看公司状态 + 单项目进度)</li>
+          <li>YAML 配置 + 热重载</li>
+          <li>CLI 启动脚本 <code>ac start</code></li>
+          <li>🎯 验收: 能跑通"老板说一句话 → 一个 dev agent 写代码 → 产出文件"</li>
+        </ul>
+      </div>
+
+      <div class="phase p2">
+        <div class="phase-head">
+          <span class="phase-tag">PHASE 2</span>
+          <h3>骨架 · 多部门流水线</h3>
+          <span class="days">7 天</span>
+        </div>
+        <div class="phase-body">
+          6 个部门全配上,Orchestrator 调度,完整流水线跑通。
+        </div>
+        <ul>
+          <li>Orchestrator 实现: 6 phase 状态机,依赖图调度</li>
+          <li>所有部门模板(产品/设计/研发/QA/运营/HR) + 默认 agent 配置</li>
+          <li>Head / Leader / Worker 三级角色协作</li>
+          <li>Web Dashboard v2: Kanban + 部门管理 + 实时日志</li>
+          <li>对话式配置(在 Mavis 里用 mavis 工具改 YAML)</li>
+          <li>任务失败重试 + QA 打回机制</li>
+          <li>🎯 验收: "做个健康科普网页" 全自动跑完 → 网页 + 测试报告交付</li>
+        </ul>
+      </div>
+
+      <div class="phase p3">
+        <div class="phase-head">
+          <span class="phase-tag">PHASE 3</span>
+          <h3>血肉 · 完整公司形态</h3>
+          <span class="days">5 天</span>
+        </div>
+        <div class="phase-body">
+          高级特性 + 多模态 + 知识沉淀 + 自我演进。
+        </div>
+        <ul>
+          <li>多模态部门: 视频/音乐/插画 agent(对接 gen_videos / batch_text_to_music)</li>
+          <li>跨项目知识库: agent 完成项目后把经验写进共享 memory</li>
+          <li>agent 自我反思: 任务失败后 agent 自己分析 + 改 prompt</li>
+          <li>Web Dashboard v3: 仪表盘统计、token 消耗、agent 性能排行</li>
+          <li>多 boss / 多项目并行</li>
+          <li>🎯 验收: 老板发"做个完整产品+营销视频",公司独立完成从 PRD 到宣传片全链路</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 技术栈 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">10</span><h2>技术栈选型(建议)</h2></div>
+    <p class="sec-sub">一切为"快速跑起来 + 易扩展"服务。</p>
+
+    <table>
+      <thead>
+        <tr><th>层</th><th>选型</th><th>理由</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>后端语言</td><td><code>Node.js + TypeScript</code></td><td>JS 全栈复用,跟前端共用类型,异步流式天然支持</td></tr>
+        <tr><td>后端框架</td><td><code>Fastify</code></td><td>轻量,WebSocket 支持好,启动快</td></tr>
+        <tr><td>前端</td><td><code>React + Vite + Tailwind</code></td><td>组件生态成熟,样式写起来快</td></tr>
+        <tr><td>实时通信</td><td><code>WebSocket (ws 库)</code></td><td>agent 流式输出 → 推前端</td></tr>
+        <tr><td>存储</td><td><code>SQLite (better-sqlite3)</code></td><td>单文件,零部署,够用</td></tr>
+        <tr><td>配置格式</td><td><code>YAML (js-yaml)</code></td><td>人友好,git 友好</td></tr>
+        <tr><td>CLI</td><td><code>Commander.js</code></td><td>简洁</td></tr>
+        <tr><td>LLM 协议</td><td><code>Anthropic SDK + OpenAI SDK</code></td><td>官方 SDK,稳定,任意兼容 endpoint</td></tr>
+        <tr><td>任务调度</td><td><code>自研 Orchestrator</code></td><td>6 phase 简单状态机,不需要外部队列</td></tr>
+        <tr><td>可选:沙箱</td><td><code>Docker / E2B</code></td><td>让 agent 在隔离环境跑代码,后期可加</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 11 关键开放问题 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">11</span><h2>还需要你拍板的 4 个开放问题</h2></div>
+    <p class="sec-sub">这些不阻塞 Phase 1,但 Phase 2 之前要确定。</p>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h4 class="mb-12">❶ Agent 跑代码沙箱?</h4>
+        <p style="font-size: 13.5px; color: var(--muted); margin: 0;">写代码的 agent 要不要在隔离环境里跑?这关系到本机安全和并发能力。</p>
+        <div style="margin-top: 10px;">
+          <span class="tag-pill orange">方案 A</span> 直接本机跑(快,信任 agent)
+          <br><span class="tag-pill orange">方案 B</span> Docker 容器隔离(安全,慢)
+          <br><span class="tag-pill orange">方案 C</span> 后期再加,先本机
+        </div>
+      </div>
+
+      <div class="card">
+        <h4 class="mb-12">❷ Agent 怎么"看"别人的产物?</h4>
+        <p style="font-size: 13.5px; color: var(--muted); margin: 0;">设计部产出设计稿,前端 agent 怎么拿到?这决定数据流设计。</p>
+        <div style="margin-top: 10px;">
+          <span class="tag-pill orange">方案 A</span> 文件路径(简单,文件即接口)
+          <br><span class="tag-pill orange">方案 B</span> 中间产物存对象存储
+          <br><span class="tag-pill orange">方案 C</span> 全部塞进 prompt 上下文
+        </div>
+      </div>
+
+      <div class="card">
+        <h4 class="mb-12">❸ 任务失败怎么办?</h4>
+        <p style="font-size: 13.5px; color: var(--muted); margin: 0;">agent 跑挂了/产出不合格的兜底策略。</p>
+        <div style="margin-top: 10px;">
+          <span class="tag-pill orange">方案 A</span> 自动重试 N 次(简单)
+          <br><span class="tag-pill orange">方案 B</span> 重试 + 升级到 Leader agent 接手
+          <br><span class="tag-pill orange">方案 C</span> 打回老板决策
+        </div>
+      </div>
+
+      <div class="card">
+        <h4 class="mb-12">❹ 项目并发上限?</h4>
+        <p style="font-size: 13.5px; color: var(--muted); margin: 0;">同时跑多少个项目 + agent。决定 token 消耗和调度策略。</p>
+        <div style="margin-top: 10px;">
+          <span class="tag-pill orange">方案 A</span> 同时只跑 1 个(稳)
+          <br><span class="tag-pill orange">方案 B</span> 最多 3 个项目并行
+          <br><span class="tag-pill orange">方案 C</span> 不限,按资源弹性
+        </div>
+      </div>
+    </div>
+
+    <div class="callout warn" style="margin-top: 24px;">
+      <strong>当前推荐</strong>
+      <p>沙箱用 C(后期再加)、产物用 A(文件路径)、失败用 B(重试 + 升级)、并发用 B(3 并行)。这些可以在 Phase 1 跑起来后再调,先开工。</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Agent Company · 规划方案 v0.1 · 2026-08-13 · 待球球确认后开工 Phase 1</p>
+  </footer>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#d4e4dd',
+      primaryTextColor: '#14171e',
+      primaryBorderColor: '#2f6f5e',
+      lineColor: '#c97b3f',
+      secondaryColor: '#f0dcc7',
+      tertiaryColor: '#fafaf6',
+      fontFamily: 'Outfit, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', padding: 16 }
+  });
+</script>
+</body>
+</html>

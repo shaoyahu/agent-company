@@ -1,0 +1,42 @@
+appId: com.agentcompany.desktop
+productName: Agent Company
+asar: true
+npmRebuild: true
+
+directories:
+  output: release
+
+files:
+  - dist/**/*
+  - assets/icon.png
+  - package.json
+  - "!node_modules/@agent-company/server/src{,/**/*}"
+  - "!node_modules/@agent-company/server/data{,/**/*}"
+  - "!node_modules/@agent-company/server/test{,/**/*}"
+  - "!node_modules/@agent-company/server/**/company.db"
+  - "!node_modules/@agent-company/server/**/company.db-wal"
+  - "!node_modules/@agent-company/server/**/company.db-shm"
+
+extraResources:
+  - from: ../web/dist
+    to: web/dist
+
+asarUnpack:
+  - "**/node_modules/better-sqlite3/**/*"
+
+mac:
+  icon: assets/icon.icns
+  category: public.app-category.developer-tools
+  hardenedRuntime: true
+  entitlements: assets/entitlements.mac.plist
+  entitlementsInherit: assets/entitlements.mac.plist
+  target:
+    - target: dir
+      arch:
+        - arm64
+    - target: dmg
+      arch:
+        - arm64
+
+dmg:
+  artifactName: "${productName}-${version}-${arch}.${ext}"

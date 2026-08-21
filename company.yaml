@@ -1,0 +1,13 @@
+# ⚠️ 此文件已废弃 ⚠️
+#
+# 从 Phase 3 重构开始,所有配置(部门/Agent/LLM Provider)都通过 Web Dashboard 维护。
+# 启动时不再读取此文件。
+#
+# 要配置公司:
+#   1. 启动 server: npm run dev
+#   2. 打开 Web Dashboard: http://localhost:5173
+#   3. 左侧导航 "部门 / Agent" 管理组织
+#   4. 左侧导航 "设置 (LLM)" 管理 LLM Provider
+#
+# 此文件保留只是为了不报错,内容会被忽略。
+# 如需彻底清理,可手动删除。

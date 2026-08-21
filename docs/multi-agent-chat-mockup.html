@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多 Agent 对话 · UI Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5f0;
+  --panel: #ffffff;
+  --line: #e9e3d6;
+  --line-soft: #f0ead9;
+  --text: #14171e;
+  --muted: #7c7a72;
+  --subtle: #a8a59a;
+  --primary: #2f6f5e;
+  --primary-soft: #d4e4dd;
+  --accent: #c97b3f;
+  --accent-soft: #f0dcc7;
+  --danger: #b06367;
+
+  /* agent 头像色 */
+  --c-product: #6366f1;
+  --c-design:  #ec4899;
+  --c-dev:     #2f6f5e;
+  --c-qa:      #c97b3f;
+  --c-ops:     #8b5cf6;
+  --c-boss:    #b06367;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 整体三栏布局 */
+.app { display: grid; grid-template-columns: 240px 1fr 280px; grid-template-rows: 56px 1fr; height: 100vh; }
+.topbar { grid-column: 1 / -1; display: flex; align-items: center; padding: 0 24px; background: var(--panel); border-bottom: 1px solid var(--line); gap: 16px; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.brand-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; }
+.topbar-tabs { display: flex; gap: 4px; margin-left: 24px; }
+.topbar-tab { padding: 6px 12px; border-radius: 8px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.topbar-tab.active { background: var(--primary-soft); color: var(--primary); font-weight: 500; }
+.topbar-spacer { flex: 1; }
+.topbar-action { padding: 6px 14px; background: var(--primary); color: white; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; }
+
+/* 侧栏 */
+.sidebar { background: var(--panel); border-right: 1px solid var(--line); overflow-y: auto; padding: 16px 0; }
+.section-label { padding: 8px 20px 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--subtle); font-weight: 600; }
+.channel { display: flex; align-items: center; gap: 10px; padding: 7px 20px; font-size: 13.5px; color: var(--text); cursor: pointer; }
+.channel:hover { background: var(--line-soft); }
+.channel.active { background: var(--primary-soft); color: var(--primary); font-weight: 500; }
+.channel .hash { color: var(--subtle); font-family: 'JetBrains Mono', monospace; }
+.channel .badge { margin-left: auto; background: var(--accent); color: white; font-size: 11px; padding: 1px 7px; border-radius: 999px; }
+
+.agent-item { display: flex; align-items: center; gap: 10px; padding: 7px 20px; font-size: 13.5px; cursor: pointer; }
+.agent-item:hover { background: var(--line-soft); }
+.avatar { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600; flex-shrink: 0; position: relative; }
+.avatar::after { content: ''; position: absolute; bottom: -1px; right: -1px; width: 8px; height: 8px; border-radius: 50%; background: #10b981; border: 2px solid var(--panel); }
+.avatar.busy::after { background: #f59e0b; }
+.avatar.idle::after { background: #94a3b8; }
+.avatar.offline::after { background: #cbd5e1; }
+.c-product { background: var(--c-product); }
+.c-design  { background: var(--c-design); }
+.c-dev     { background: var(--c-dev); }
+.c-qa      { background: var(--c-qa); }
+.c-ops     { background: var(--c-ops); }
+.c-boss    { background: var(--c-boss); }
+
+/* 主聊天区 */
+.main { display: flex; flex-direction: column; background: var(--bg); min-width: 0; }
+.chat-head { padding: 14px 24px; background: var(--panel); border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; }
+.chat-head h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.chat-head .topic { font-size: 13px; color: var(--muted); margin-left: 8px; }
+.chat-head .members { margin-left: auto; display: flex; gap: 4px; }
+.chat-head .members .avatar { width: 26px; height: 26px; }
+
+.chat-body { flex: 1; overflow-y: auto; padding: 24px 32px; display: flex; flex-direction: column; gap: 18px; }
+.day-divider { display: flex; align-items: center; gap: 12px; color: var(--subtle); font-size: 12px; margin: 8px 0; }
+.day-divider::before, .day-divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+.msg { display: flex; gap: 12px; max-width: 88%; }
+.msg-avatar { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; }
+.msg-body { flex: 1; min-width: 0; }
+.msg-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+.msg-author { font-weight: 600; font-size: 14px; }
+.msg-role { font-size: 11px; color: var(--subtle); padding: 1px 6px; background: var(--line-soft); border-radius: 4px; }
+.msg-time { font-size: 11px; color: var(--subtle); margin-left: auto; }
+.msg-text { font-size: 14px; line-height: 1.55; color: var(--text); white-space: pre-wrap; }
+.msg-text code { background: var(--line-soft); padding: 1px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--primary); }
+.msg-tool { background: white; border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 8px; padding: 8px 12px; font-size: 12.5px; margin-top: 6px; font-family: 'JetBrains Mono', monospace; color: var(--muted); }
+.msg-tool-label { color: var(--accent); font-weight: 500; margin-right: 6px; }
+
+.msg.thinking { opacity: 0.6; }
+.msg.thinking .msg-text { font-style: italic; color: var(--muted); }
+.typing { display: inline-flex; gap: 3px; padding: 8px 0; }
+.typing span { width: 6px; height: 6px; background: var(--subtle); border-radius: 50%; animation: bounce 1.2s infinite; }
+.typing span:nth-child(2) { animation-delay: 0.15s; }
+.typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes bounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.msg.right { align-self: flex-end; flex-direction: row-reverse; }
+.msg.right .msg-meta { flex-direction: row-reverse; }
+.msg.right .msg-body { text-align: right; }
+.msg.right .msg-text { background: var(--primary-soft); padding: 10px 14px; border-radius: 12px 12px 0 12px; }
+.msg.right .msg-tool { text-align: left; background: white; }
+
+.composer { padding: 16px 24px; background: var(--panel); border-top: 1px solid var(--line); }
+.composer-input { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: 14px; min-height: 50px; color: var(--muted); }
+.composer-hint { font-size: 12px; color: var(--subtle); margin-top: 6px; display: flex; gap: 12px; }
+.composer-hint kbd { background: var(--line-soft); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+/* 右侧栏(老板指挥台) */
+.rightbar { background: var(--panel); border-left: 1px solid var(--line); padding: 18px 20px; overflow-y: auto; }
+.rb-section { margin-bottom: 24px; }
+.rb-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--subtle); font-weight: 600; margin-bottom: 10px; }
+.project-card { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; cursor: pointer; }
+.project-card:hover { border-color: var(--primary); }
+.project-card .title { font-weight: 600; font-size: 13.5px; margin-bottom: 4px; }
+.project-card .meta { font-size: 12px; color: var(--muted); }
+.progress { height: 4px; background: var(--line-soft); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); }
+
+.agent-card { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line-soft); }
+.agent-card:last-child { border-bottom: none; }
+.agent-card .name { font-size: 13px; font-weight: 500; }
+.agent-card .task { font-size: 11.5px; color: var(--muted); }
+.agent-card .status-dot { margin-left: auto; }
+
+.token-meter { display: flex; align-items: baseline; gap: 4px; font-family: 'JetBrains Mono', monospace; }
+.token-meter .big { font-size: 22px; font-weight: 600; }
+.token-meter .unit { font-size: 12px; color: var(--muted); }
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- 顶部 -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">AC</div>
+      <span>球球的 AI 公司</span>
+    </div>
+    <div class="topbar-tabs">
+      <div class="topbar-tab active">💬 协作</div>
+      <div class="topbar-tab">📋 项目</div>
+      <div class="topbar-tab">🏢 部门</div>
+      <div class="topbar-tab">📊 仪表盘</div>
+    </div>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-action">+ 新建项目</div>
+  </div>
+
+  <!-- 左:频道列表 -->
+  <div class="sidebar">
+    <div class="section-label">频道</div>
+    <div class="channel active"><span class="hash">#</span> general <span class="badge">3</span></div>
+    <div class="channel"><span class="hash">#</span> product-team</div>
+    <div class="channel"><span class="hash">#</span> dev-frontend</div>
+    <div class="channel"><span class="hash">#</span> dev-backend</div>
+    <div class="channel"><span class="hash">#</span> design</div>
+    <div class="channel"><span class="hash">#</span> qa-lab</div>
+    <div class="channel"><span class="hash">#</span> boss-room</div>
+
+    <div class="section-label" style="margin-top: 18px;">直聊 (DM)</div>
+    <div class="agent-item">
+      <div class="avatar c-product">PM</div>
+      <span>产品经理</span>
+    </div>
+    <div class="agent-item">
+      <div class="avatar c-design busy">UI</div>
+      <span>设计师小美</span>
+    </div>
+    <div class="agent-item">
+      <div class="avatar c-dev">前端-1</div>
+      <span>前端工程师</span>
+    </div>
+    <div class="agent-item">
+      <div class="avatar c-dev busy">后端</div>
+      <span>后端工程师</span>
+    </div>
+    <div class="agent-item">
+      <div class="avatar c-qa">QA</div>
+      <span>测试小张</span>
+    </div>
+    <div class="agent-item">
+      <div class="avatar c-ops">OP</div>
+      <span>运维</span>
+    </div>
+  </div>
+
+  <!-- 中:聊天主区 -->
+  <div class="main">
+    <div class="chat-head">
+      <span style="font-family: 'JetBrains Mono', monospace; color: var(--subtle);">#</span>
+      <h3>general</h3>
+      <span class="topic">项目:健康科普网页</span>
+      <div class="members">
+        <div class="avatar c-product">PM</div>
+        <div class="avatar c-design busy">UI</div>
+        <div class="avatar c-dev">FE</div>
+        <div class="avatar c-dev busy">BE</div>
+        <div class="avatar c-qa">QA</div>
+      </div>
+    </div>
+
+    <div class="chat-body">
+      <div class="day-divider">今天 14:23</div>
+
+      <!-- 老板发起 -->
+      <div class="msg right">
+        <div class="msg-avatar avatar c-boss">球</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">球球 (老板)</span>
+            <span class="msg-time">14:23</span>
+          </div>
+          <div class="msg-text">@所有人 我想做个健康科普网页,主题是"喝酒到底有多伤身体",要求视觉冲击力强、动画炫酷、能上小红书。预算没上限,质量给我拉满。开工。</div>
+        </div>
+      </div>
+
+      <!-- 调度员回应 -->
+      <div class="msg">
+        <div class="msg-avatar avatar c-ops">调度</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">调度员</span>
+            <span class="msg-role">HR/Meta</span>
+            <span class="msg-time">14:23</span>
+          </div>
+          <div class="msg-text">收到 ✅ 已自动立项 <code>proj-20260813-001</code>,工作流:<code>PRD → 设计 → 前端+后端并行 → QA → 交付</code>。先派给产品经理,其他人待命。</div>
+          <div class="msg-tool"><span class="msg-tool-label">tool: create_project</span> { id: "proj-20260813-001", title: "健康科普网页", workflow: "standard-6phase" }</div>
+        </div>
+      </div>
+
+      <!-- 产品经理分析 -->
+      <div class="msg">
+        <div class="msg-avatar avatar c-product">PM</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">产品经理</span>
+            <span class="msg-role">产品部 · Head</span>
+            <span class="msg-time">14:25</span>
+          </div>
+          <div class="msg-text">我先做个快速分析。视觉冲击力强 + 小红书风格,核心要解决:第一屏 3 秒 hook、情绪对比强烈、移动端优先。我现在去查同类账号的爆款规律,然后写 PRD。</div>
+          <div class="msg-tool"><span class="msg-tool-label">tool: web_search</span> query: "小红书 健康科普 爆款 视觉" · 12 结果</div>
+          <div class="msg-tool"><span class="msg-tool-label">tool: schedule</span> 写 PRD.md · 预计 8 分钟</div>
+        </div>
+      </div>
+
+      <!-- 产品经理 PRD 完成 -->
+      <div class="msg">
+        <div class="msg-avatar avatar c-product">PM</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">产品经理</span>
+            <span class="msg-role">产品部 · Head</span>
+            <span class="msg-time">14:34</span>
+          </div>
+          <div class="msg-text">PRD 写完了 📄 <code>projects/proj-20260813-001/prd.md</code></div>
+          <div class="msg-text" style="background: var(--bg); padding: 12px 14px; border-radius: 8px; font-size: 13px; border-left: 3px solid var(--primary); margin-top: 4px;">
+<strong>核心创意:</strong> 屏幕一分为二,左边是"喝酒的潇洒",右边是"身体的崩溃",用滚动触发对比动画。结尾是一句 slogan:「爽 1 秒,痛 10 年」</div>
+          <div class="msg-text">@调度员 可以进设计阶段了</div>
+        </div>
+      </div>
+
+      <!-- 调度员派单 -->
+      <div class="msg">
+        <div class="msg-avatar avatar c-ops">调度</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">调度员</span>
+            <span class="msg-role">HR/Meta</span>
+            <span class="msg-time">14:34</span>
+          </div>
+          <div class="msg-text">@设计师小美 看 PRD,出视觉方案。@前端-1 @后端 等设计稿到位再开工。</div>
+        </div>
+      </div>
+
+      <!-- 设计师在思考 -->
+      <div class="msg thinking">
+        <div class="msg-avatar avatar c-design busy">UI</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">设计师小美</span>
+            <span class="msg-role">设计部 · Worker</span>
+            <span class="msg-time">14:35</span>
+          </div>
+          <div class="msg-text">正在思考视觉方向... 需要考虑:对比风格(暗 vs 亮)、动画节奏(快慢对比)、色调(警示色 + 健康绿)
+            <span class="typing"><span></span><span></span><span></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 设计产出 -->
+      <div class="msg">
+        <div class="msg-avatar avatar c-design">UI</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">设计师小美</span>
+            <span class="msg-role">设计部 · Worker</span>
+            <span class="msg-time">14:42</span>
+          </div>
+          <div class="msg-text">设计稿好了 🎨 主视觉用电影感的分屏 + 高对比色,做了 3 个备选方案:</div>
+          <div class="msg-tool"><span class="msg-tool-label">file:</span> projects/proj-20260813-001/design/v1-分屏对比.png</div>
+          <div class="msg-tool"><span class="msg-tool-label">file:</span> projects/proj-20260813-001/design/v2-时间轴.png</div>
+          <div class="msg-tool"><span class="msg-tool-label">file:</span> projects/proj-20260813-001/design/v3-全屏沉浸.png</div>
+          <div class="msg-text">@产品经理 你选一个?或者 @球球 直接定?</div>
+        </div>
+      </div>
+
+      <!-- 老板插话 -->
+      <div class="msg right">
+        <div class="msg-avatar avatar c-boss">球</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">球球 (老板)</span>
+            <span class="msg-time">14:45</span>
+          </div>
+          <div class="msg-text">v1 分屏,左红右绿,把对比再拉狠一点,字体要更粗。用 v1 风格,@前端-1 @后端 开工。</div>
+        </div>
+      </div>
+
+      <!-- 调度员派单 -->
+      <div class="msg">
+        <div class="msg-avatar avatar c-ops">调度</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">调度员</span>
+            <span class="msg-role">HR/Meta</span>
+            <span class="msg-time">14:45</span>
+          </div>
+          <div class="msg-text">收到 @前端-1 用 v1 风格开始写,@后端 准备数据接口(prd 里列了 6 个)。</div>
+        </div>
+      </div>
+
+      <!-- 前端工作中 -->
+      <div class="msg">
+        <div class="msg-avatar avatar c-dev">FE</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">前端工程师</span>
+            <span class="msg-role">研发部 · Frontend</span>
+            <span class="msg-time">14:48</span>
+          </div>
+          <div class="msg-text">收到,React + Framer Motion 写动画,先用 mock 数据搭框架,等后端接口。</div>
+          <div class="msg-tool"><span class="msg-tool-label">tool: write</span> src/components/Hero.tsx (82 行)</div>
+          <div class="msg-tool"><span class="msg-tool-label">tool: write</span> src/components/SplitView.tsx (156 行)</div>
+        </div>
+      </div>
+
+      <!-- 后端工作中 -->
+      <div class="msg">
+        <div class="msg-avatar avatar c-dev busy">BE</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">后端工程师</span>
+            <span class="msg-role">研发部 · Backend</span>
+            <span class="msg-time">14:50</span>
+          </div>
+          <div class="msg-text">API 在写,/api/health-data 6 个 endpoint。先用 mock server,前端可以并行调。</div>
+        </div>
+      </div>
+
+      <!-- QA 接入 -->
+      <div class="msg">
+        <div class="msg-avatar avatar c-qa">QA</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">测试小张</span>
+            <span class="msg-role">质量部 · Head</span>
+            <span class="msg-time">15:02</span>
+          </div>
+          <div class="msg-text">我先看 PRD 写测试用例,边开发边准备,免得最后集中爆雷。等前端给 dev URL 我就开测。</div>
+        </div>
+      </div>
+
+      <!-- 系统提示 -->
+      <div class="day-divider">系统消息</div>
+      <div class="msg">
+        <div class="msg-avatar avatar c-ops">调度</div>
+        <div class="msg-body">
+          <div class="msg-meta">
+            <span class="msg-author">调度员</span>
+            <span class="msg-role">HR/Meta</span>
+            <span class="msg-time">15:03</span>
+          </div>
+          <div class="msg-text">📊 当前项目状态:</div>
+          <div class="msg-text" style="background: var(--bg); padding: 12px 14px; border-radius: 8px; font-size: 13px; margin-top: 4px;">
+            ✅ PRD 完成<br>
+            ✅ 设计稿确认(v1)<br>
+            🔄 前端开发中 (60%)<br>
+            🔄 后端开发中 (40%)<br>
+            ⏳ QA 待启动<br>
+            ⏳ 部署待启动
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 老板输入框 -->
+    <div class="composer">
+      <div class="composer-input">@球球 跟你的 AI 公司说点什么... 试试 @PM / @前端-1 / @所有人</div>
+      <div class="composer-hint">
+        <span><kbd>/</kbd> 命令</span>
+        <span><kbd>@</kbd> 提及 agent</span>
+        <span><kbd>Enter</kbd> 发送</span>
+        <span style="margin-left: auto;">🔌 老板有上帝视角 · 可以随时插话</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右侧:老板指挥台 -->
+  <div class="rightbar">
+
+    <div class="rb-section">
+      <div class="rb-title">当前项目</div>
+      <div class="project-card">
+        <div class="title">健康科普网页</div>
+        <div class="meta">proj-20260813-001 · 进行中</div>
+        <div class="progress"><div class="progress-fill" style="width: 58%"></div></div>
+        <div class="meta" style="margin-top: 6px; font-size: 11.5px;">58% · 4 阶段已完成 1.5</div>
+      </div>
+      <div class="project-card" style="opacity: 0.6;">
+        <div class="title">个人作品集 v2</div>
+        <div class="meta">proj-20260810-003 · 待启动</div>
+      </div>
+    </div>
+
+    <div class="rb-section">
+      <div class="rb-title">Agent 状态 (6 在线 / 1 离线)</div>
+
+      <div class="agent-card">
+        <div class="avatar c-product">PM</div>
+        <div>
+          <div class="name">产品经理</div>
+          <div class="task">✅ 已完成 PRD</div>
+        </div>
+        <div class="status-dot" style="width:8px;height:8px;border-radius:50%;background:#10b981;"></div>
+      </div>
+      <div class="agent-card">
+        <div class="avatar c-design">UI</div>
+        <div>
+          <div class="name">设计师小美</div>
+          <div class="task">✅ 设计稿已交付</div>
+        </div>
+        <div class="status-dot" style="width:8px;height:8px;border-radius:50%;background:#10b981;"></div>
+      </div>
+      <div class="agent-card">
+        <div class="avatar c-dev">FE</div>
+        <div>
+          <div class="name">前端-1</div>
+          <div class="task">🔄 写组件中 (60%)</div>
+        </div>
+        <div class="status-dot" style="width:8px;height:8px;border-radius:50%;background:#f59e0b;"></div>
+      </div>
+      <div class="agent-card">
+        <div class="avatar c-dev">BE</div>
+        <div>
+          <div class="name">后端-1</div>
+          <div class="task">🔄 写 API 中 (40%)</div>
+        </div>
+        <div class="status-dot" style="width:8px;height:8px;border-radius:50%;background:#f59e0b;"></div>
+      </div>
+      <div class="agent-card">
+        <div class="avatar c-qa">QA</div>
+        <div>
+          <div class="name">测试小张</div>
+          <div class="task">📝 准备测试用例</div>
+        </div>
+        <div class="status-dot" style="width:8px;height:8px;border-radius:50%;background:#10b981;"></div>
+      </div>
+      <div class="agent-card">
+        <div class="avatar c-ops">OP</div>
+        <div>
+          <div class="name">运维</div>
+          <div class="task">😴 待启动</div>
+        </div>
+        <div class="status-dot" style="width:8px;height:8px;border-radius:50%;background:#94a3b8;"></div>
+      </div>
+    </div>
+
+    <div class="rb-section">
+      <div class="rb-title">今日消耗</div>
+      <div class="token-meter">
+        <span class="big">142,580</span>
+        <span class="unit">tokens</span>
+      </div>
+      <div class="meta" style="font-size: 12px; color: var(--muted); margin-top: 4px;">≈ $0.85 · 4.2 分钟</div>
+    </div>
+
+    <div class="rb-section">
+      <div class="rb-title">LLM 接入</div>
+      <div style="font-size: 12.5px; color: var(--muted); line-height: 1.7;">
+        • claude-sonnet-4-5 (主)<br>
+        • gpt-4o (设计部)<br>
+        • deepseek-v3 (后端)
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{ts,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        // 设计 token — 引用 CSS 变量
+        canvas: 'var(--canvas)',
+        surface: 'var(--surface)',
+        'surface-2': 'var(--surface-2)',
+        line: 'var(--line)',
+        'line-soft': 'var(--line-soft)',
+        text: 'var(--text)',
+        'text-2': 'var(--text-2)',
+        muted: 'var(--muted)',
+        subtle: 'var(--subtle)',
+        faint: 'var(--faint)',
+        accent: 'var(--accent)',
+        'accent-2': 'var(--accent-2)',
+        'accent-soft': 'var(--accent-soft)',
+        'accent-line': 'var(--accent-line)',
+        ok: 'var(--ok)',
+        'ok-soft': 'var(--ok-soft)',
+        warn: 'var(--warn)',
+        'warn-soft': 'var(--warn-soft)',
+        danger: 'var(--danger)',
+        'danger-soft': 'var(--danger-soft)',
+        info: 'var(--info)',
+        'info-soft': 'var(--info-soft)',
+        'cat-openai': 'var(--cat-openai)',
+        'cat-openai-soft': 'var(--cat-openai-soft)',
+        'cat-anthropic': 'var(--cat-anthropic)',
+        'cat-anthropic-soft': 'var(--cat-anthropic-soft)',
+        'cat-both': 'var(--cat-both)',
+        'cat-both-soft': 'var(--cat-both-soft)',
+      },
+      fontFamily: {
+        sans: ['Inter', 'Outfit', 'system-ui', '-apple-system', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
+        display: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'SF Mono', 'ui-monospace', 'monospace'],
+      },
+      borderRadius: {
+        DEFAULT: '4px',
+        sm: '2px',
+        md: '6px',
+        lg: '8px',
+      },
+      boxShadow: {
+        'token-sm': 'var(--shadow-sm)',
+        'token-md': 'var(--shadow-md)',
+        'token-lg': 'var(--shadow-lg)',
+      },
+    },
+  },
+  plugins: [],
+};

@@ -1,0 +1,39 @@
+# dependencies
+node_modules/
+*/node_modules/
+
+# build
+dist/
+*/dist/
+build/
+*/build/
+electron/release/
+test-results/
+*.tsbuildinfo
+
+# env
+.env
+.env.*
+!.env.example
+
+# runtime
+**/*.db
+**/*.db-*
+server/data/
+projects/
+logs/
+*.log
+.agent-company/
+.superpowers/
+docs/superpowers/
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# project outputs
+projects/*/build/
+projects/*/.next/
+projects/*/node_modules/
+projects/*/__pycache__/

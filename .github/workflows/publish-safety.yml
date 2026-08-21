@@ -1,0 +1,21 @@
+name: Publish Safety
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  reject-sensitive-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reject runtime and credential files
+        shell: bash
+        run: |
+          set -euo pipefail
+          forbidden='(^|/)(\.env($|\.)|.*\.db(-.*)?$|.*\.(pem|key|p12|mobileprovision)$|server/data/|projects/)'
+          if git ls-files | grep -E "$forbidden" | grep -vE '(^|/)\.env\.example$'; then
+            echo "检测到禁止公开的运行态或凭据文件"
+            exit 1
+          fi

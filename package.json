@@ -1,0 +1,37 @@
+{
+  "name": "agent-company",
+  "version": "0.1.0",
+  "private": true,
+  "description": "一个可生长的 AI 多 agent 公司",
+  "type": "module",
+  "workspaces": [
+    "server",
+    "web",
+    "electron"
+  ],
+  "scripts": {
+    "build:root-ui": "tsc -p tsconfig.json && vite build",
+    "test:root-ui": "node --import tsx --test test/unit/*.test.ts",
+    "dev": "concurrently -n server,web -c green,cyan \"npm run dev -w server\" \"npm run dev -w web\"",
+    "dev:server-for-electron": "npm run build -w server -- --watch",
+    "e": "npm run build -w server && concurrently -k -s first -n server,web,electron -c green,cyan,magenta \"npm run dev:server-for-electron\" \"cross-env AGENT_COMPANY_ELECTRON_RENDERER=1 npm run dev -w web -- --host 127.0.0.1\" \"wait-on file:server/dist/bootstrap.js && npm run dev -w electron\"",
+    "dev:electron": "npm run build -w server && concurrently -k -s first -n server,web,electron -c green,cyan,magenta \"npm run dev:server-for-electron\" \"cross-env AGENT_COMPANY_ELECTRON_RENDERER=1 npm run dev -w web -- --host 127.0.0.1\" \"wait-on file:server/dist/bootstrap.js && npm run dev -w electron\"",
+    "build": "npm run build:root-ui && npm run build -w server && npm run build -w web && npm run build -w electron",
+    "build:electron": "npm run build -w server && npm run build -w web && npm run build -w electron",
+    "package:mac": "npm run build:electron && node electron/scripts/package-mac.mjs",
+    "test:electron": "npm run test:unit -w electron",
+    "ac": "node scripts/ac.mjs",
+    "init": "node scripts/init.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "@lobehub/icons": "^5.16.0",
+    "lucide-react": "^1.31.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.62.4"
+  }
+}

@@ -1,0 +1,247 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+ * 设计 token — "Studio 工作室" 风格
+ * 配色避开 AI 默认(mica cream / forest green / terracotta),
+ * 用近白 + 极淡灰阶 + 1 个深 teal 强调色。
+ * 字体:Outfit display / Inter body / JetBrains Mono 标识与代码。
+ * 圆角统一 4px,极少阴影,极淡描边。
+ * ============================================================ */
+
+:root {
+  /* 背景层 */
+  --canvas: #FAFAF9;        /* 页面背景,极浅暖白 */
+  --surface: #FFFFFF;        /* 卡片/抽屉/弹窗 */
+  --surface-2: #F5F5F4;      /* toolbar / status bar / 禁用背景 */
+  --surface-3: #FFFFFF;      /* hover 高亮 */
+
+  /* 描边 */
+  --line: #E7E5E4;           /* 标准描边 */
+  --line-soft: #F0EFEC;      /* 极淡描边,分隔条 */
+
+  /* 文字 */
+  --text: #0C0A09;            /* 主文字,近黑 */
+  --text-2: #1C1917;          /* 二级文字 */
+  --muted: #57534E;           /* 次要文字 */
+  --subtle: #78716C;          /* 描述/placeholder */
+  --faint: #A8A29E;           /* 极淡文字/icon */
+
+  /* 强调(主) */
+  --accent: #0E7490;          /* deep teal,签名色 */
+  --accent-2: #155E75;        /* hover */
+  --accent-soft: #ECFEFF;     /* 选中底色 */
+  --accent-line: #67E8F9;     /* focus ring */
+
+  /* 状态色 */
+  --ok: #15803D;               /* success / done */
+  --ok-soft: #F0FDF4;
+  --ok-line: #BBF7D0;
+  --warn: #B45309;             /* running / pending */
+  --warn-soft: #FFFBEB;
+  --warn-line: #FCD34D;
+  --danger: #B91C1C;           /* failed / error */
+  --danger-soft: #FEF2F2;
+  --danger-line: #FCA5A5;
+  --info: #1D4ED8;             /* 提示 */
+  --info-soft: #EFF6FF;
+  --info-line: #BFDBFE;
+  --on-solid: #FFFFFF;
+
+  /* 分类色(平台/协议) */
+  --cat-openai: #047857;       /* emerald-700 */
+  --cat-openai-soft: #ECFDF5;
+  --cat-anthropic: #C2410C;    /* orange-700 */
+  --cat-anthropic-soft: #FFF7ED;
+  --cat-both: #0E7490;         /* teal-700 */
+  --cat-both-soft: #ECFEFF;
+
+  /* 字体 */
+  --font-display: 'Outfit', 'Inter', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-body: 'Inter', 'Outfit', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', ui-monospace, monospace;
+
+  /* 阴影(只用极淡的) */
+  --shadow-sm: 0 1px 2px rgba(12, 10, 9, 0.04);
+  --shadow-md: 0 4px 12px rgba(12, 10, 9, 0.06);
+  --shadow-lg: 0 12px 32px rgba(12, 10, 9, 0.08);
+
+  /* 圆角(统一 4px) */
+  --radius-sm: 2px;
+  --radius: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;  /* 只用于 modal 大容器 */
+
+  /* ============================================================
+   * UI 主题层 — 用户可在「设置 → 界面」里调
+   * 这些变量 JS 可在运行时覆盖(document.documentElement.style.setProperty)
+   * 改完立即生效,无需刷新
+   * ============================================================ */
+  --ui-radius: 4px;              /* sharp=0 | default=4 | rounded=8 — 全局圆角 */
+  --ui-font-size: 14px;          /* sm=13 | md=14 | lg=16 — 全局基础字号 */
+  --ui-sidebar-item-h: 40px;     /* compact=36 | default=40 | comfortable=44 — sidebar nav item 高度 */
+  --ui-sidebar-gap: 2px;         /* compact=1 | default=2 | comfortable=4 — sidebar item 间距 */
+  --ui-page-pad-y: 24px;         /* compact=20 | default=24 | comfortable=32 — PageHeader 上下 */
+  --ui-control-h-sm: 30px;       /* 紧凑按钮高度 */
+  --ui-control-h-md: 36px;       /* 默认按钮高度 */
+  --ui-control-h-input: 38px;    /* 默认 input 高度 */
+  --ui-control-h-input-sm: 32px; /* 紧凑 input 高度 */
+  /* UI 圆角的快捷别名 — 组件里 `borderRadius: 'var(--ui-radius)'` */
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--canvas);
+  color: var(--text);
+  /* 球球 2026-08-15:界面设置 — 字号档位(sm=13 / md=14 / lg=16) */
+  font-size: var(--ui-font-size);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button { font-family: inherit; cursor: pointer; }
+input, textarea, select { font-family: inherit; }
+
+.chat-input-box__textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role='button']:focus-visible {
+  outline: 2px solid var(--accent-line);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--faint); }
+
+/* 选中态高亮 */
+::selection { background: var(--accent-soft); color: var(--accent-2); }
+
+/* 焦点环统一(用 outline 而不是 ring) */
+*:focus-visible {
+  outline: 2px solid var(--accent-line);
+  outline-offset: 1px;
+  border-radius: var(--ui-radius);
+}
+
+/* 平滑滚动 */
+html { scroll-behavior: smooth; }
+
+/* 全局禁横向滚动条 — 任何子元素溢出都不应撑出 viewport */
+html, body, #root { max-width: 100vw; overflow-x: hidden; }
+
+.page-loading {
+  display: flex;
+  min-height: 320px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--subtle);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.page-loading__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: page-loading-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes page-loading-pulse {
+  50% { opacity: 0.35; transform: scale(0.75); }
+}
+
+/* ============================================================
+ * 弹窗 - 窄屏自适应
+ * 用 .modal-shell / .modal-body 类,JS 改 inline style 不影响
+ * ============================================================ */
+@media (max-width: 720px) {
+  .modal-shell {
+    flex: 0 0 100vw !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+  }
+  .modal-body {
+    /* 留出 iOS safe area */
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}
+
+/* 弹窗 body 内部容器默认带 padding,弹窗可以重置 */
+.modal-body > .modal-body-flush {
+  margin: -16px;
+}
+
+/* ============================================================
+ * Slider 美化(球球 2026-08-15 第 23 轮:UI 设置从三档选项改成无极滑动条)
+ * 跟工业控制台风格统一:track 4px / thumb 18px 圆点 / 圆角跟随 ui-radius
+ * Webkit + Firefox 都覆盖
+ * ============================================================ */
+input[type="range"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 18px; /* thumb 高度,让 thumb 在中间 */
+  cursor: pointer;
+}
+/* Webkit (Chrome / Safari) */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--surface-2);
+  border-radius: var(--ui-radius);
+  border: 1px solid var(--line);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  margin-top: -8px; /* 让 thumb 居中在 track(track 4 + border 1*2 = 6,thumb 18,offset = (18-6)/2 = 6,但考虑 border 缩进, -8 比较稳) */
+  cursor: grab;
+  transition: transform 0.1s;
+  box-shadow: 0 1px 2px rgba(12, 10, 9, 0.08);
+}
+input[type="range"]::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.15);
+}
+/* Firefox */
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: var(--surface-2);
+  border-radius: var(--ui-radius);
+  border: 1px solid var(--line);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  cursor: grab;
+  transition: transform 0.1s;
+  box-shadow: 0 1px 2px rgba(12, 10, 9, 0.08);
+}
+input[type="range"]::-moz-range-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.15);
+}
